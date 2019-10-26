@@ -45,10 +45,22 @@ export function fetchStrings(terms) {
         sentences
       } = data
       const result = {
-        topFeatures,
+        topFeatures:[],
         sentimentDistribution,
         sentences: [],
       }
+      let featureI = 1;
+      for (let feature in topFeatures){
+        result.topFeatures.push(
+          {
+            id: `feature-${featureI}-${Math.floor(Math.random() * Math.floor(99999))}`,
+            value : feature,
+            count: topFeatures[feature]
+          }
+        )
+        featureI++
+      }
+      
       for (let sentence in sentences) {
         result.sentences.push({ id: sentences[sentence], value: sentence })
       }

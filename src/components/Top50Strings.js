@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Badge } from 'react-bootstrap';
 import { connect } from "react-redux";
 
 class Top50Strings extends Component {
@@ -16,9 +16,9 @@ class Top50Strings extends Component {
                     </thead>
                     <tbody>
                         {
-                            this.props.top50Items.map(item =>
+                            this.props.topFeatures.map(item =>
                                 <tr key={item.id}>
-                                    <td>{item.value}</td>
+                                    <td>{item.value} <Badge variant="secondary">{item.count}</Badge></td>
                                 </tr>
                             )
                         }
@@ -29,7 +29,7 @@ class Top50Strings extends Component {
     }
 }
 const mapStateToProps = state => ({
-    top50Items: state.strings.top50Items,
+    topFeatures: state.strings.topFeatures,
 });
 
 export default connect(mapStateToProps)(Top50Strings);

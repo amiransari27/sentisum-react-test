@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { fetchStrings } from '../store/actions/stringsActions';
 import { connect } from "react-redux";
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import { InputGroup, FormControl, Button, Spinner } from 'react-bootstrap';
 
 class Search extends Component {
 
@@ -38,12 +38,12 @@ class Search extends Component {
                         aria-describedby="basic-addon2"
                         value={this.state.terms}
                         onChange={this.handleOnChange}
-                        />
+                    />
                     <InputGroup.Append>
-                        <Button 
-                            variant="outline-secondary" 
-                            onClick={()=> this.fetchStrings(this.state.terms)}>
-                            Search
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => this.fetchStrings(this.state.terms)}>
+                            Search {this.props.loading && <Spinner animation="border" size="sm" />}
                         </Button>
                     </InputGroup.Append>
                 </InputGroup>
@@ -58,6 +58,7 @@ class Search extends Component {
 const mapStateToProps = state => ({
     top50Items: state.strings.top50Items,
     sentences: state.strings.sentences,
+    loading: state.strings.loading
 });
 
 

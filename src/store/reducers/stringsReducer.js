@@ -1,15 +1,15 @@
-import { 
+import {
     FETCH_STRINGS_BEGIN,
-    FETCH_STRINGS_SUCCESS, 
+    FETCH_STRINGS_SUCCESS,
     FETCH_STRINGS_FAILURE,
     SET_STRINGS_ITEMS,
 } from "../actions/stringsActions";
 
 const initialState = {
-    topFeatures: {},
+    topFeatures: [],
     sentimentDistribution: {},
     sentences: [],
-    top50Items:[],
+    top50Items: [],
     items: [],
     page: 1,
     pages: '',
@@ -19,7 +19,7 @@ const initialState = {
 };
 
 export default function stringsReducer(state = initialState, action) {
-    
+
     switch (action.type) {
         case FETCH_STRINGS_BEGIN:
             return {
@@ -29,22 +29,25 @@ export default function stringsReducer(state = initialState, action) {
             };
 
         case FETCH_STRINGS_SUCCESS:
-            
-            let total =  action.payload.stringsData.sentences.length
-            total = (total>1000 && 1000) || total
-            let pages = (total > 0) && Math.floor(total/30)
-            let top50Items = action.payload.stringsData.sentences.slice(0,50).reverse()
-            let items = action.payload.stringsData.sentences.slice(0,30)
+
+
+            let total = action.payload.stringsData.sentences.length
+            total = (total > 1000 && 1000) || total
+            let pages = (total > 0) && Math.floor(total / 30)
+            let items = action.payload.stringsData.sentences.slice(0, 30)
+            let sortedFeatures = [...action.payload.stringsData.topFeatures];
+            sortedFeatures.sort(function (a, b) {
+                return b.count - a.count;
+            });
             return {
                 ...state,
                 loading: false,
-                topFeatures: action.payload.stringsData.topFeatures,
+                topFeatures: sortedFeatures,
                 sentimentDistribution: action.payload.stringsData.sentimentDistribution,
                 sentences: action.payload.stringsData.sentences,
-                top50Items:top50Items,
-                items:items,
-                pages:pages,
-                total:total,
+                items: items,
+                pages: pages,
+                total: total,
             };
 
         case FETCH_STRINGS_FAILURE:
@@ -58,7 +61,7 @@ export default function stringsReducer(state = initialState, action) {
             return {
                 ...state,
                 items: action.payload.stringsItems.items,
-                page:action.payload.stringsItems.page,
+                page: action.payload.stringsItems.page,
             };
 
         default:
